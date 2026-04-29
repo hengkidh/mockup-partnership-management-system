@@ -502,13 +502,20 @@ const App = () => {
                     </div>
                   </div>
                   <div className="lg:col-span-5 flex flex-col gap-4">
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex-1 text-center">
-                      <h3 className="font-bold text-sm text-gray-800 mb-4">Pipeline pengajuan saat ini</h3>
-                      <div className="grid grid-cols-5 gap-1">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex-1 flex flex-col justify-center">
+                      <h3 className="font-bold text-sm text-gray-800 mb-6">Pipeline pengajuan saat ini</h3>
+                      <div className="flex items-start justify-between relative px-2">
+                        {/* Connecting Line */}
+                        <div className="absolute top-5 left-6 right-6 h-0.5 bg-gray-100 z-0"></div>
+                        
                         {pipelineData.map((item, idx) => (
-                          <div key={idx} className={`${item.bg} py-2 rounded-lg`}>
-                            <p className={`text-base font-bold ${item.color}`}>{item.count}</p>
-                            <p className="text-[7px] text-gray-500 font-bold uppercase">{item.label.split(' ')[0]}</p>
+                          <div key={idx} className="relative z-10 flex flex-col items-center gap-2 group">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${item.bg} ${item.color} shadow-sm border-[3px] border-white group-hover:scale-110 transition-transform`}>
+                              {item.count}
+                            </div>
+                            <p className="text-[9px] text-gray-500 font-bold uppercase w-16 text-center leading-tight">
+                              {item.label}
+                            </p>
                           </div>
                         ))}
                       </div>
