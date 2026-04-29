@@ -465,7 +465,7 @@ const App = () => {
                   {statsBupati.map((s, i) => (
                     <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
                       <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i > 1 ? 'opacity-10' : 'opacity-20'}`}>
-                        {React.cloneElement(s.icon as React.ReactElement, { size: 80 })}
+                        {React.cloneElement(s.icon as React.ReactElement<any>, { size: 80 })}
                       </div>
                       <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                       <div className="flex justify-between items-start relative z-10 w-full mb-2">
@@ -613,11 +613,11 @@ const App = () => {
                 {statsAdmin.map((s, i) => (
                   <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
                     <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i === 3 ? 'opacity-10' : 'opacity-20'}`}>
-                      {React.cloneElement(s.icon as React.ReactElement, { size: 80 })}
+                      {React.cloneElement(s.icon as React.ReactElement<any>, { size: 80 })}
                     </div>
                     <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                     <div className="flex justify-between items-start relative z-10 w-full mb-2">
-                      <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                       <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
                     </div>
                     <div className="relative z-10">
                       <p className="text-xs font-bold uppercase tracking-wider opacity-90 drop-shadow-sm line-clamp-1">{s.title}</p>
@@ -762,7 +762,7 @@ const App = () => {
                 {statsMitra.map((s, i) => (
                   <div key={i} className={`p-6 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
                     <div className="absolute -right-6 -bottom-6 opacity-20 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-100">
-                      {React.cloneElement(s.icon as React.ReactElement, { size: 90 })}
+                      {React.cloneElement(s.icon as React.ReactElement<any>, { size: 90 })}
                     </div>
                     <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                     <p className="text-6xl font-extrabold relative z-10 tracking-tight drop-shadow-sm">{s.value}</p>
