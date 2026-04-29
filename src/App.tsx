@@ -27,7 +27,8 @@ import {
   Check,
   ArrowLeft,
   FileUp,
-  ChevronDown
+  ChevronDown,
+  Target
 } from 'lucide-react';
 
 const App = () => {
@@ -40,7 +41,7 @@ const App = () => {
     { title: "Total Kerja Sama", value: "857", sub: "+12% tahun ini", color: "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white border-none", icon: <Briefcase /> },
     { title: "Mitra Aktif", value: "1.024", sub: "se-Indonesia", color: "bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white border-none", icon: <Users /> },
     { title: "KS Internasional", value: "23", sub: "9 negara", color: "bg-white text-gray-800 border border-gray-100", icon: <LayoutGrid className="text-[#3498DB]" /> },
-    { title: "Realisasi 2026", value: "98%", sub: "Tepat waktu", color: "bg-white text-gray-800 border border-gray-100", icon: <TrendingUp className="text-[#27AE60]" /> },
+    { title: "Target KS 2026", value: "19", max: "/ 24", sub: "79% tercapai", color: "bg-white text-gray-800 border border-gray-100", icon: <Target className="text-[#27AE60]" />, progress: 79 },
   ];
 
   const distributionData = [
@@ -80,7 +81,7 @@ const App = () => {
     { title: "Total pengajuan bulan ini", value: "38", sub: "+8 dari bulan lalu", color: "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white border-none", icon: <FileText /> },
     { title: "Menunggu verifikasi", value: "7", sub: "2 lebih dari 3 hari", color: "bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white border-none", icon: <Clock /> },
     { title: "Perlu tindakan segera", value: "2", sub: "Segera tindak lanjuti", color: "bg-gradient-to-br from-[#C0392B] to-[#A93226] text-white border-none", icon: <AlertTriangle /> },
-    { title: "KS aktif bulan ini", value: "14", sub: "3 selesai", color: "bg-white text-gray-800 border border-gray-100", icon: <Check className="text-[#27AE60]" /> },
+    { title: "Target KS 2026", value: "19", max: "/ 24", sub: "79% tercapai", color: "bg-white text-gray-800 border border-gray-100", icon: <Target className="text-[#27AE60]" />, progress: 79 },
   ];
 
   const verificationQueue = [
@@ -462,18 +463,26 @@ const App = () => {
                 </section>
 
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {statsBupati.map((s, i) => (
+                  {statsBupati.map((s: any, i) => (
                     <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
                       <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i > 1 ? 'opacity-10' : 'opacity-20'}`}>
                         {React.cloneElement(s.icon as React.ReactElement<any>, { size: 80 })}
                       </div>
                       <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                       <div className="flex justify-between items-start relative z-10 w-full mb-2">
-                        <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                        <div className="flex items-baseline gap-1">
+                          <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                          {s.max && <p className="text-2xl font-bold opacity-50">{s.max}</p>}
+                        </div>
                         {i > 1 && <ExternalLink size={16} className="opacity-40" />}
                       </div>
                       <div className="relative z-10">
                         <p className="text-xs font-bold uppercase tracking-wider opacity-90 drop-shadow-sm line-clamp-1">{s.title}</p>
+                        {s.progress !== undefined && (
+                          <div className="w-full bg-gray-200 rounded-full h-1 mt-2 mb-1">
+                            <div className="bg-green-500 h-1 rounded-full" style={{ width: `${s.progress}%` }}></div>
+                          </div>
+                        )}
                         {s.sub && (
                           <p className={`text-[10px] mt-1.5 font-bold inline-block px-2.5 py-0.5 rounded-full ${i > 1 ? 'bg-gray-100 text-gray-600' : 'bg-black/10 text-white'}`}>
                             {s.sub}
@@ -610,17 +619,25 @@ const App = () => {
               </div>
 
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {statsAdmin.map((s, i) => (
+                {statsAdmin.map((s: any, i) => (
                   <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
                     <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i === 3 ? 'opacity-10' : 'opacity-20'}`}>
                       {React.cloneElement(s.icon as React.ReactElement<any>, { size: 80 })}
                     </div>
                     <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
                     <div className="flex justify-between items-start relative z-10 w-full mb-2">
-                       <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                       <div className="flex items-baseline gap-1">
+                         <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                         {s.max && <p className="text-2xl font-bold opacity-50">{s.max}</p>}
+                       </div>
                     </div>
                     <div className="relative z-10">
                       <p className="text-xs font-bold uppercase tracking-wider opacity-90 drop-shadow-sm line-clamp-1">{s.title}</p>
+                      {s.progress !== undefined && (
+                        <div className="w-full bg-gray-200 rounded-full h-1 mt-2 mb-1">
+                          <div className="bg-green-500 h-1 rounded-full" style={{ width: `${s.progress}%` }}></div>
+                        </div>
+                      )}
                       {s.sub && (
                         <p className={`text-[10px] mt-1.5 font-bold inline-block px-2.5 py-0.5 rounded-full ${i === 3 ? 'bg-gray-100 text-gray-600' : 'bg-black/10 text-white'}`}>
                           {s.sub}
