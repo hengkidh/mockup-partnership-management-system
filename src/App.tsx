@@ -5,12 +5,10 @@ import {
   PieChart, 
   FileText, 
   TrendingUp, 
-  Search, 
   Bell, 
   User, 
   AlertTriangle,
   ExternalLink,
-  ChevronRight,
   Menu,
   X,
   Inbox,
@@ -25,7 +23,6 @@ import {
   LayoutGrid,
   Download,
   PlusCircle,
-  CheckCircle2,
   Clock,
   Check,
   ArrowLeft,
@@ -105,7 +102,19 @@ const App = () => {
     { text: "KS-2025-0089 resmi selesai. MoU telah tersimpan di dokumen Anda", time: "Des 2025", color: "bg-[#1B4332]" },
   ];
 
-  const SidebarItem = ({ icon, label, active, badge = null, onClick = undefined }) => (
+  const SidebarItem = ({ 
+    icon, 
+    label, 
+    active = false, 
+    badge = null, 
+    onClick = undefined 
+  }: { 
+    icon: React.ReactNode; 
+    label: string; 
+    active?: boolean; 
+    badge?: string | number | null; 
+    onClick?: () => void; 
+  }) => (
     <li>
       <button 
         onClick={onClick}
@@ -217,7 +226,7 @@ const App = () => {
               <div className="space-y-2">
                 <label className="text-sm font-bold text-gray-700">Tujuan & Ruang Lingkup</label>
                 <textarea 
-                  rows="5" 
+                  rows={5} 
                   placeholder="Jelaskan tujuan dan ruang lingkup..." 
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
                 ></textarea>
