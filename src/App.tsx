@@ -26,12 +26,14 @@ import {
   Clock,
   Check,
   ArrowLeft,
-  FileUp
+  FileUp,
+  ChevronDown
 } from 'lucide-react';
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [viewMode, setViewMode] = useState('BUPATI'); // 'BUPATI', 'OPD', 'ADMIN', 'MITRA'
+  const [isDemoDropdownOpen, setIsDemoDropdownOpen] = useState(false);
 
   // --- DATA MOCK BUPATI ---
   const statsBupati = [
@@ -137,23 +139,50 @@ const App = () => {
       <div className="min-h-screen bg-gray-50 font-sans p-4 md:p-8">
         <div className="max-w-6xl mx-auto space-y-12">
           {/* Top Header / Back Button */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between relative z-50">
             <button 
               onClick={() => setViewMode('MITRA')}
               className="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-medium"
             >
               <ArrowLeft size={18} /> Kembali ke Dashboard
             </button>
-            <div className="flex gap-2">
-              {['BUPATI', 'OPD', 'ADMIN', 'MITRA'].map(m => (
-                <button 
-                  key={m} 
-                  onClick={() => setViewMode(m)}
-                  className="text-[9px] px-3 py-1 bg-white border rounded hover:bg-gray-50"
-                >
-                  Ganti ke {m}
-                </button>
-              ))}
+            <div className="relative">
+              <button 
+                onClick={() => setIsDemoDropdownOpen(!isDemoDropdownOpen)}
+                className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-yellow-500 text-gray-900 border rounded-full hover:bg-yellow-400"
+              >
+                Ganti Tampilan Demo
+                <ChevronDown size={14} className={`transition-transform ${isDemoDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isDemoDropdownOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setIsDemoDropdownOpen(false)}
+                  ></div>
+                  <div className="absolute top-full right-0 mt-2 bg-white text-gray-800 rounded-xl shadow-xl shadow-black/10 border border-gray-100 overflow-hidden w-48 z-50">
+                    <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/50">
+                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Tampilan Demo</p>
+                    </div>
+                    <div className="flex flex-col py-1">
+                      {['BUPATI', 'OPD', 'ADMIN', 'MITRA', 'FORM'].map(m => (
+                        <button 
+                          key={m}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setViewMode(m);
+                            setIsDemoDropdownOpen(false);
+                          }}
+                          className={`text-left px-4 py-2.5 text-xs transition-colors ${viewMode === m ? 'font-bold text-[#1B4332] bg-green-50' : 'text-gray-600 hover:bg-gray-50'}`}
+                        >
+                          Mode: {m}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -350,21 +379,6 @@ const App = () => {
           </ul>
         </nav>
 
-        <div className="p-3 border-t border-t-gray-100 bg-gray-50 flex flex-col gap-1">
-           <p className={`text-[8px] font-bold text-gray-400 px-1 ${!isSidebarOpen && 'hidden'}`}>GANTI TAMPILAN (DEMO):</p>
-           <div className="flex flex-wrap gap-1">
-             {['BUPATI', 'OPD', 'ADMIN', 'MITRA', 'FORM'].map(m => (
-               <button 
-                key={m}
-                onClick={() => setViewMode(m)}
-                className={`text-[9px] px-2 py-1 rounded border ${viewMode === m ? 'bg-[#1B4332] text-white border-[#1B4332]' : 'bg-white text-gray-500 border-gray-200'}`}
-               >
-                 {isSidebarOpen ? m : m[0]}
-               </button>
-             ))}
-           </div>
-        </div>
-
         <div className="p-4 border-t border-t-gray-100">
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-full flex items-center justify-center p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -375,7 +389,7 @@ const App = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Navbar */}
-        <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-10">
+        <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-10 relative">
           <div className="flex items-center gap-4">
              <div className="hidden sm:flex flex-col">
                 <h1 className="text-sm font-bold">Bagian Perekonomian & Kerja Sama</h1>
@@ -387,9 +401,44 @@ const App = () => {
               <Bell size={18} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#1B4332]"></span>
             </button>
-            <div className="flex items-center gap-2 bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full cursor-pointer">
-              <span className="text-[10px] font-bold uppercase">{viewMode === 'MITRA' ? 'Digitaliz' : viewMode}</span>
-              <User size={14} />
+            <div className="relative">
+              <div 
+                className="flex items-center gap-2 bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full cursor-pointer hover:bg-yellow-400 transition-colors"
+                onClick={() => setIsDemoDropdownOpen(!isDemoDropdownOpen)}
+              >
+                <User size={14} />
+                <span className="text-[10px] font-bold uppercase">{viewMode === 'MITRA' ? 'Digitaliz' : viewMode}</span>
+                <ChevronDown size={14} className={`transition-transform ${isDemoDropdownOpen ? 'rotate-180' : ''}`} />
+              </div>
+              
+              {isDemoDropdownOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setIsDemoDropdownOpen(false)}
+                  ></div>
+                  <div className="absolute top-full right-0 mt-2 bg-white text-gray-800 rounded-xl shadow-xl shadow-black/10 border border-gray-100 overflow-hidden w-48 z-50">
+                    <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50/50">
+                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Tampilan Demo</p>
+                    </div>
+                    <div className="flex flex-col py-1">
+                      {['BUPATI', 'OPD', 'ADMIN', 'MITRA', 'FORM'].map(m => (
+                        <button 
+                          key={m}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setViewMode(m);
+                            setIsDemoDropdownOpen(false);
+                          }}
+                          className={`text-left px-4 py-2.5 text-xs transition-colors ${viewMode === m ? 'font-bold text-[#1B4332] bg-green-50' : 'text-gray-600 hover:bg-gray-50'}`}
+                        >
+                          Mode: {m}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </header>
