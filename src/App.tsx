@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Home, 
   List, 
@@ -28,13 +28,28 @@ import {
   ArrowLeft,
   FileUp,
   ChevronDown,
-  Target
+  Target,
+  MonitorPlay
 } from 'lucide-react';
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [viewMode, setViewMode] = useState('BUPATI'); // 'BUPATI', 'OPD', 'ADMIN', 'MITRA'
   const [isDemoDropdownOpen, setIsDemoDropdownOpen] = useState(false);
+  const [isPresentationMode, setIsPresentationMode] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const SLIDE_COUNT = 3;
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (isPresentationMode) {
+      interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % SLIDE_COUNT);
+      }, 8000); // 8 seconds per slide
+    }
+    return () => clearInterval(interval);
+  }, [isPresentationMode]);
 
   // --- DATA MOCK BUPATI ---
   const statsBupati = [
@@ -60,13 +75,27 @@ const App = () => {
     { label: "Selesai bulan ini", count: 3, color: "text-emerald-600", bg: "bg-emerald-50" },
   ];
 
-  const topOPD = [
-    { name: "Dinas Pendidikan", count: 42 },
-    { name: "Diskominfo", count: 38 },
-    { name: "Dinas Kesehatan", count: 31 },
-    { name: "DPUPR", count: 26 },
-    { name: "BPKAD", count: 21 },
-    { name: "Dinas Pertanian", count: 17 },
+  const opdStats = [
+    { name: "Dinas Pendidikan dan Kebudayaan", active: 12, target: 15 },
+    { name: "Dinas Kesehatan", active: 18, target: 20 },
+    { name: "Dinas PUPRP", active: 8, target: 10 },
+    { name: "DPRKPLH", active: 5, target: 8 },
+    { name: "Dinas Sosial", active: 11, target: 12 },
+    { name: "Satpol PP dan Damkar", active: 3, target: 5 },
+    { name: "Dinas Dukcapil", active: 14, target: 15 },
+    { name: "Dispora", active: 7, target: 10 },
+    { name: "Dinas Ketahanan Pangan & Perikanan", active: 9, target: 12 },
+    { name: "Diskominfo", active: 22, target: 25 },
+    { name: "Dinas Pariwisata", active: 16, target: 18 },
+    { name: "DPMD", active: 10, target: 15 },
+    { name: "DP2KBP3A", active: 6, target: 8 },
+    { name: "DPMPTSP", active: 25, target: 30 },
+    { name: "Dinas Perhubungan", active: 4, target: 6 },
+    { name: "Dinas Pertanian, Hortikultura & Perkebunan", active: 13, target: 15 },
+    { name: "Disnakkeswan", active: 7, target: 10 },
+    { name: "Diskopdag", active: 15, target: 20 },
+    { name: "Dispersip", active: 5, target: 8 },
+    { name: "Disnakerind", active: 11, target: 15 }
   ];
 
   const potentialPartners = [
@@ -457,9 +486,17 @@ const App = () => {
           {/* VIEW: BUPATI */}
           {viewMode === 'BUPATI' && (
              <div className="animate-in fade-in duration-500 space-y-6">
-                <section>
-                  <h2 className="text-xl font-bold text-gray-800">Selamat datang, Bapak Bupati</h2>
-                  <p className="text-xs text-gray-500 mt-1">Ringkasan kerja sama daerah Kabupaten Tanah Laut — data per 21 April 2026</p>
+                <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800">Selamat datang, Bapak Bupati</h2>
+                    <p className="text-xs text-gray-500 mt-1">Ringkasan kerja sama daerah Kabupaten Tanah Laut — data per 21 April 2026</p>
+                  </div>
+                  <button 
+                    onClick={() => { setIsPresentationMode(true); setCurrentSlide(0); }}
+                    className="flex items-center justify-center gap-2 bg-[#1B4332] text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all w-full sm:w-auto"
+                  >
+                    <MonitorPlay size={16} /> Mode Presentasi TV
+                  </button>
                 </section>
 
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -553,17 +590,29 @@ const App = () => {
                       </tbody>
                     </table>
                   </div>
-                  <div className="lg:col-span-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h3 className="font-bold text-sm text-gray-800 mb-6">Top OPD pelaksana KS</h3>
-                    <div className="space-y-4">
-                      {topOPD.map((opd, i) => (
-                        <div key={i} className="space-y-1">
-                          <div className="flex justify-between text-[10px] font-bold text-gray-600"><span>{opd.name}</span><span>{opd.count}</span></div>
+                  <div className="lg:col-span-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col h-[350px]">
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="font-bold text-sm text-gray-800">Progres Target SKPD/OPD</h3>
+                      <button className="text-[9px] font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded">Lihat Semua</button>
+                    </div>
+                    <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar flex-1">
+                      {opdStats.sort((a,b) => (b.active/b.target) - (a.active/a.target)).map((opd, i) => {
+                        const perc = Math.round((opd.active / opd.target) * 100);
+                        return (
+                        <div key={i} className="space-y-1 group hover:bg-gray-50/50 p-1.5 -ml-1.5 rounded-lg transition-colors">
+                          <div className="flex justify-between text-[10px] font-bold text-gray-600">
+                             <span className="truncate mr-2 text-gray-700" title={opd.name}>{opd.name}</span>
+                             <span className="shrink-0 text-green-700">{opd.active} / {opd.target}</span>
+                          </div>
                           <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-[#1B4332] h-full rounded-full" style={{ width: `${(opd.count/topOPD[0].count)*100}%` }}></div>
+                            <div className={`h-full rounded-full transition-all duration-500 group-hover:opacity-80 ${perc >= 100 ? 'bg-green-500' : perc >= 70 ? 'bg-yellow-400' : 'bg-red-400'}`} style={{ width: `${Math.min(perc, 100)}%` }}></div>
+                          </div>
+                          <div className="flex justify-between items-center w-full">
+                            <span className="text-[8px] text-gray-400 font-medium">Pencapaian target tahun ini</span>
+                            <span className="text-[8px] font-extrabold text-gray-500">{perc}%</span>
                           </div>
                         </div>
-                      ))}
+                      )})}
                     </div>
                   </div>
                 </section>
@@ -894,6 +943,137 @@ const App = () => {
 
         </div>
       </main>
+
+      {/* OVERLAY MODE PRESENTASI */}
+      {isPresentationMode && (
+        <div className="fixed inset-0 z-[100] bg-gray-900 text-white flex flex-col overflow-hidden animate-in fade-in duration-500">
+          {/* Progress Bar (Timer) */}
+          <div className="absolute top-0 left-0 h-1 bg-white/20 w-full z-10">
+            <div 
+              className="h-full bg-green-500 transition-all duration-[8000ms] ease-linear"
+              style={{ width: '100%' }}
+              key={currentSlide} // Reset animation on slide change
+            />
+          </div>
+
+          <div className="flex-1 flex flex-col p-8 md:p-12 relative overflow-hidden">
+            {/* Header Presentasi */}
+            <div className="flex justify-between items-start mb-10 relative z-20">
+              <div>
+                <h1 className="text-3xl font-extrabold flex items-center gap-3"><MonitorPlay size={32} className="text-green-500" /> Mode Presentasi Eksekutif</h1>
+                <p className="text-gray-400 mt-2">Pemerintah Kabupaten Tanah Laut — {new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              </div>
+              <button 
+                onClick={() => setIsPresentationMode(false)}
+                className="p-3 bg-white/10 hover:bg-red-500 hover:text-white rounded-full transition-colors cursor-pointer z-50 pointer-events-auto"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            {/* Konten Slide */}
+            <div className="flex-1 relative w-full h-full flex items-center justify-center">
+              {/* SLIDE 0: Kinerja Utama (Statistik Bupati) */}
+              <div className={`absolute inset-0 w-full h-full flex flex-col justify-center transition-all duration-700 ${currentSlide === 0 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'}`}>
+                <h2 className="text-4xl font-bold mb-12 text-center">Ringkasan Kerja Sama Utama</h2>
+                <div className="grid grid-cols-2 gap-8 w-full max-w-6xl mx-auto">
+                  {statsBupati.map((s: any, i) => (
+                    <div key={i} className={`p-10 rounded-3xl ${s.color.includes('bg-white') ? 'bg-gray-800 border-none' : s.color} shadow-2xl relative overflow-hidden transform hover:scale-105 transition-transform duration-500 flex flex-col justify-center min-h-[250px]`}>
+                      <div className="absolute right-0 bottom-0 opacity-10 scale-150 transform translate-x-8 translate-y-8">
+                        {React.cloneElement(s.icon as React.ReactElement<any>, { size: 160 })}
+                      </div>
+                      <p className="text-xl font-bold uppercase tracking-wider text-gray-300 drop-shadow-sm mb-4 relative z-10">{s.title}</p>
+                      <div className="flex items-baseline gap-3 relative z-10">
+                        <p className="text-7xl font-black drop-shadow-lg text-white">{s.value}</p>
+                        {s.max && <p className="text-4xl font-bold text-white/50">{s.max}</p>}
+                      </div>
+                      {s.progress !== undefined && (
+                        <div className="w-full bg-black/30 rounded-full h-3 mt-6 relative z-10">
+                          <div className="bg-green-400 h-3 rounded-full" style={{ width: `${s.progress}%` }}></div>
+                        </div>
+                      )}
+                      {s.sub && (
+                        <p className="text-lg font-bold text-gray-400 mt-4 inline-flex items-center gap-2 relative z-10">
+                          {s.sub}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* SLIDE 1: Progress OPD */}
+              <div className={`absolute inset-0 w-full h-full flex flex-col justify-center transition-all duration-700 ${currentSlide === 1 ? 'opacity-100 translate-x-0' : currentSlide < 1 ? 'opacity-0 -translate-x-full' : 'opacity-0 translate-x-full'}`}>
+                <h2 className="text-4xl font-bold mb-8 text-center">Progres Target Tahunan SKPD / OPD</h2>
+                <div className="grid grid-cols-3 gap-6 w-full max-w-[90vw] mx-auto">
+                  {opdStats.sort((a,b) => (b.active/b.target) - (a.active/a.target)).slice(0, 15).map((opd, i) => {
+                    const perc = Math.round((opd.active / opd.target) * 100);
+                    return (
+                      <div key={i} className="bg-gray-800 rounded-2xl p-5 border border-gray-700 flex flex-col justify-between">
+                         <div className="flex justify-between items-start mb-3">
+                           <p className="text-lg font-bold line-clamp-1 flex-1 leading-tight mr-4">{opd.name}</p>
+                           <span className={`px-3 py-1 rounded-full text-xs font-black shrink-0 ${perc >= 100 ? 'bg-green-500/20 text-green-400' : perc >= 70 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+                             {perc}%
+                           </span>
+                         </div>
+                         <div className="flex justify-between items-end">
+                           <div className="w-full mr-6">
+                             <div className="w-full bg-gray-900 rounded-full h-2 mb-1.5">
+                               <div className={`h-2 rounded-full ${perc >= 100 ? 'bg-green-500' : perc >= 70 ? 'bg-yellow-400' : 'bg-red-400'}`} style={{ width: `${Math.min(perc, 100)}%` }}></div>
+                             </div>
+                             <p className="text-xs text-gray-400">Realisasi Target</p>
+                           </div>
+                           <p className="text-2xl font-black">{opd.active}<span className="text-sm font-normal text-gray-500">/{opd.target}</span></p>
+                         </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* SLIDE 2: Potensi Mitra */}
+              <div className={`absolute inset-0 w-full h-full flex flex-col justify-center transition-all duration-700 ${currentSlide === 2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'}`}>
+                <h2 className="text-4xl font-bold mb-12 text-center">Analisis Kecerdasan Buatan (AI) — Rekomendasi Calon Mitra Baru</h2>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-[90vw] mx-auto">
+                  {potentialPartners.map((partner, i) => (
+                    <div key={i} className="bg-gray-800 p-8 rounded-[2rem] border border-gray-700/50 shadow-xl flex flex-col items-center text-center relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-green-500/10 to-transparent blur-3xl rounded-full"></div>
+                      <div className={`w-28 h-28 rounded-[28px] ${partner.color} mb-6 flex items-center justify-center text-4xl font-black shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                        {partner.icon}
+                      </div>
+                      <h4 className="text-xl font-bold text-white mb-2">{partner.name}</h4>
+                      <p className="text-sm font-medium text-gray-400 mb-6">{partner.type}</p>
+                      
+                      <div className="mt-auto w-full">
+                        <div className="bg-gray-900 rounded-xl p-4 mb-4">
+                          <p className="text-xs text-gray-500 mb-1">Rekomendasi Dinas Terkait</p>
+                          <p className="text-sm font-bold text-gray-300">{partner.opd[0]} {partner.opd.length > 1 && `+ ${partner.opd.length - 1} lainnya`}</p>
+                        </div>
+                        <div className="flex justify-between items-center bg-green-500/10 rounded-xl p-4 border border-green-500/20">
+                          <span className="text-sm font-semibold text-green-400">Tingkat Kecocokan</span>
+                          <span className="text-2xl font-black text-green-400">{partner.match}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer / Pagination Indicators */}
+            <div className="absolute bottom-8 left-0 w-full flex justify-center items-center gap-4 z-20">
+              {[0, 1, 2].map((idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  className={`transition-all duration-300 rounded-full cursor-pointer pointer-events-auto ${currentSlide === idx ? 'w-12 h-3 bg-green-500' : 'w-3 h-3 bg-gray-600 hover:bg-gray-400'}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
