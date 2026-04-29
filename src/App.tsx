@@ -1,122 +1,574 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import { 
+  Home, 
+  List, 
+  PieChart, 
+  FileText, 
+  TrendingUp, 
+  Search, 
+  Bell, 
+  User, 
+  AlertTriangle,
+  ExternalLink,
+  ChevronRight,
+  Menu,
+  X,
+  Inbox,
+  Briefcase,
+  PlayCircle,
+  ClipboardCheck,
+  FileBox,
+  MessageSquare,
+  ArrowRight,
+  Settings,
+  Users,
+  LayoutGrid,
+  Download,
+  PlusCircle,
+  CheckCircle2,
+  Clock,
+  Check
+} from 'lucide-react';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [viewMode, setViewMode] = useState('BUPATI'); // 'BUPATI', 'OPD', 'ADMIN', 'MITRA'
+
+  // --- DATA MOCK BUPATI ---
+  const statsBupati = [
+    { title: "Total Kerja Sama", value: "857", sub: "+12% tahun ini", color: "bg-[#1B4332] text-white" },
+    { title: "Mitra Aktif", value: "1.024", sub: "se-Indonesia", color: "bg-[#F39C12] text-white" },
+    { title: "KS Internasional", value: "23", sub: "9 negara", color: "bg-white text-gray-800 border border-gray-100" },
+    { title: "Realisasi 2026", value: "98%", sub: "Tepat waktu", color: "bg-white text-gray-800 border border-gray-100" },
+  ];
+
+  const distributionData = [
+    { label: "Antar Pemerintah Daerah", count: 312, percent: 36, color: "bg-[#1B4332]" },
+    { label: "Pemerintah — Swasta", count: 256, percent: 30, color: "bg-[#F39C12]" },
+    { label: "Pemerintah — Perguruan Tinggi", count: 178, percent: 21, color: "bg-[#3498DB]" },
+    { label: "Kerja Sama Luar Negeri", count: 64, percent: 7, color: "bg-[#9B59B6]" },
+    { label: "Lembaga / Komunitas", count: 47, percent: 6, color: "bg-[#E67E22]" },
+  ];
+
+  const pipelineData = [
+    { label: "Baru diajukan", count: 14, color: "text-green-600", bg: "bg-green-50" },
+    { label: "Diverifikasi", count: 7, color: "text-yellow-600", bg: "bg-yellow-50" },
+    { label: "Disposisi", count: 5, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Diproses", count: 9, color: "text-purple-600", bg: "bg-purple-50" },
+    { label: "Selesai bulan ini", count: 3, color: "text-emerald-600", bg: "bg-emerald-50" },
+  ];
+
+  const topOPD = [
+    { name: "Dinas Pendidikan", count: 42 },
+    { name: "Diskominfo", count: 38 },
+    { name: "Dinas Kesehatan", count: 31 },
+    { name: "DPUPR", count: 26 },
+    { name: "BPKAD", count: 21 },
+    { name: "Dinas Pertanian", count: 17 },
+  ];
+
+  // --- DATA MOCK ADMIN TKKSD ---
+  const statsAdmin = [
+    { title: "Total pengajuan bulan ini", value: "38", sub: "+8 dari bulan lalu", color: "bg-[#1B4332] text-white" },
+    { title: "Menunggu verifikasi", value: "7", sub: "", color: "bg-[#F39C12] text-white" },
+    { title: "Perlu tindakan segera", value: "2", sub: "", color: "bg-[#C0392B] text-white" },
+    { title: "KS aktif bulan ini", value: "14", sub: "3 selesai", color: "bg-white text-gray-800 border border-gray-100" },
+  ];
+
+  const verificationQueue = [
+    { id: "KS-2026-0042", mitra: "Digitaliz", jenis: "Swasta", tgl: "20 Apr", status: "Diverifikasi", sColor: "text-yellow-600 bg-yellow-50", action: "Tinjau", aColor: "border-green-600 text-green-600" },
+    { id: "KS-2026-0041", mitra: "Univ. Banjarmasin", jenis: "Perguruan Tinggi", tgl: "18 Apr", status: "Baru", sColor: "text-green-600 bg-green-50", action: "Tinjau", aColor: "border-green-600 text-green-600" },
+    { id: "KS-2026-0040", mitra: "PLN UP3", jenis: "BUMN", tgl: "17 Apr", status: "Perlu Segera", sColor: "text-red-500 bg-red-50", action: "Tinjau", aColor: "border-green-600 text-green-600" },
+    { id: "KS-2026-0039", mitra: "Pemkab Banjar", jenis: "Antar Daerah", tgl: "15 Apr", status: "Disposisi", sColor: "text-blue-500 bg-blue-50", action: "Pantau", aColor: "border-orange-500 text-orange-500" },
+    { id: "KS-2026-0038", mitra: "Telkom Indonesia", jenis: "Swasta", tgl: "14 Apr", status: "Diproses", sColor: "text-purple-500 bg-purple-50", action: "Pantau", aColor: "border-orange-500 text-orange-500" },
+  ];
+
+  const systemNotifications = [
+    { text: "KS-2026-0040 (PLN) sudah 4 hari belum diverifikasi", time: "Sekarang", color: "bg-yellow-500" },
+    { text: "OPD Diskominfo mengirim laporan progres KS-2026-0031", time: "1 jam lalu", color: "bg-green-600" },
+    { text: "Pengajuan baru masuk: Univ. Banjarmasin (KS-2026-0041)", time: "2 jam lalu", color: "bg-green-600" },
+    { text: "KS-2025-0078 akan berakhir dalam 12 hari — koordinasi dengan OPD", time: "Kemarin", color: "bg-red-500" },
+  ];
+
+  // --- DATA MOCK MITRA (image_b4da93.png) ---
+  const statsMitra = [
+    { title: "Pengajuan Aktif", value: "3", color: "bg-[#1B4332] text-white" },
+    { title: "Sedang Diverifikasi", value: "1", color: "bg-[#F39C12] text-white" },
+    { title: "KS Selesai", value: "2", color: "bg-white text-gray-400 border border-gray-100" },
+  ];
+
+  const mitraNotifications = [
+    { text: "Pengajuan KS-2026-0042 sedang diverifikasi oleh Admin TKKSD", time: "2 jam lalu", color: "bg-yellow-500" },
+    { text: "Dokumen lengkap — pengajuan KS-2026-0031 diteruskan ke OPD Diskominfo", time: "2 hari lalu", color: "bg-[#1B4332]" },
+    { text: "KS-2025-0089 resmi selesai. MoU telah tersimpan di dokumen Anda", time: "Des 2025", color: "bg-[#1B4332]" },
+  ];
+
+  const SidebarItem = ({ icon, label, active, badge, onClick }) => (
+    <li>
+      <button 
+        onClick={onClick}
+        className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${active ? 'bg-green-50 text-[#1B4332] font-semibold' : 'text-gray-500 hover:bg-gray-100'}`}
+      >
+        <div className="flex items-center gap-3">
+          {icon}
+          {isSidebarOpen && <span className="truncate">{label}</span>}
+        </div>
+        {isSidebarOpen && badge && (
+          <span className="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{badge}</span>
+        )}
+      </button>
+    </li>
+  );
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="flex h-screen bg-gray-50 font-sans text-gray-900 overflow-hidden">
+      {/* Sidebar */}
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-r-gray-100 transition-all duration-300 ease-in-out flex flex-col z-20 shrink-0`}>
+        <div className="p-4 flex items-center gap-3 border-b h-16 bg-[#1B4332]">
+          <div className="w-8 h-8 bg-yellow-500 rounded flex items-center justify-center text-white font-bold shrink-0">TL</div>
+          {isSidebarOpen && (
+            <div className="text-white overflow-hidden whitespace-nowrap">
+              <p className="text-xs font-bold leading-tight">Bagian Perekonomian</p>
+              <p className="text-[10px] opacity-80 leading-tight">& Kerja Sama</p>
+            </div>
+          )}
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
+        <nav className="flex-1 py-4 overflow-y-auto">
+          <div className="px-4 mb-2">
+            <p className={`text-[10px] font-bold text-gray-400 uppercase tracking-wider ${!isSidebarOpen && 'hidden'}`}>UTAMA</p>
+          </div>
+          <ul className="space-y-1 px-2 mb-6">
+            <SidebarItem icon={<Home size={20} />} label="Beranda" active={true} />
+            {viewMode === 'BUPATI' && (
+              <>
+                <SidebarItem icon={<List size={20} />} label="Daftar KS Aktif" />
+                <SidebarItem icon={<PieChart size={20} />} label="Distribusi OPD" />
+              </>
+            )}
+            {viewMode === 'OPD' && (
+              <>
+                <SidebarItem icon={<Inbox size={20} />} label="Disposisi Masuk" badge="2" />
+                <SidebarItem icon={<Briefcase size={20} />} label="Kerja Sama Saya" />
+              </>
+            )}
+            {viewMode === 'ADMIN' && (
+              <>
+                <SidebarItem icon={<Clock size={20} />} label="Verifikasi Pengajuan" badge="7" />
+                <SidebarItem icon={<ArrowRight size={20} />} label="Disposisi ke OPD" />
+                <SidebarItem icon={<PlayCircle size={20} />} label="Monitoring Pipeline" />
+              </>
+            )}
+            {viewMode === 'MITRA' && (
+              <>
+                <SidebarItem icon={<User size={20} />} label="Profil Instansi" />
+                <SidebarItem icon={<PlusCircle size={20} />} label="Ajukan Kerja Sama" />
+                <SidebarItem icon={<List size={20} />} label="Riwayat Pengajuan" />
+              </>
+            )}
           </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
+
+          <div className="px-4 mb-2">
+            <p className={`text-[10px] font-bold text-gray-400 uppercase tracking-wider ${!isSidebarOpen && 'hidden'}`}>
+              {viewMode === 'BUPATI' ? 'LAPORAN' : viewMode === 'ADMIN' ? 'MANAJEMEN' : 'PELAKSANAAN'}
+            </p>
+          </div>
+          <ul className="space-y-1 px-2">
+             {viewMode === 'BUPATI' && <><SidebarItem icon={<FileText size={20} />} label="Laporan Evaluasi" /><SidebarItem icon={<TrendingUp size={20} />} label="Tren Tahunan" /></>}
+             {viewMode === 'OPD' && <><SidebarItem icon={<PlayCircle size={20} />} label="Progress" /><SidebarItem icon={<ClipboardCheck size={20} />} label="Laporan" /><SidebarItem icon={<FileBox size={20} />} label="Dokumen" /></>}
+             {viewMode === 'ADMIN' && <><SidebarItem icon={<Users size={20} />} label="Manajemen User" /><SidebarItem icon={<LayoutGrid size={20} />} label="Manajemen Konten" /><SidebarItem icon={<Settings size={20} />} label="Evaluasi KS" /></>}
+             {viewMode === 'MITRA' && <><SidebarItem icon={<FileBox size={20} />} label="Dokumen Saya" /><SidebarItem icon={<MessageSquare size={20} />} label="FAQ & Konsultasi" /></>}
           </ul>
+        </nav>
+
+        <div className="p-3 border-t border-t-gray-100 bg-gray-50 flex flex-col gap-1">
+           <p className={`text-[8px] font-bold text-gray-400 px-1 ${!isSidebarOpen && 'hidden'}`}>GANTI TAMPILAN (DEMO):</p>
+           <div className="flex flex-wrap gap-1">
+             {['BUPATI', 'OPD', 'ADMIN', 'MITRA'].map(m => (
+               <button 
+                key={m}
+                onClick={() => setViewMode(m)}
+                className={`text-[9px] px-2 py-1 rounded border ${viewMode === m ? 'bg-[#1B4332] text-white border-[#1B4332]' : 'bg-white text-gray-500 border-gray-200'}`}
+               >
+                 {isSidebarOpen ? m : m[0]}
+               </button>
+             ))}
+           </div>
         </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+        <div className="p-4 border-t border-t-gray-100">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-full flex items-center justify-center p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200">
+            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </aside>
 
-export default App
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Navbar */}
+        <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-10">
+          <div className="flex items-center gap-4">
+             <div className="hidden sm:flex flex-col">
+                <h1 className="text-sm font-bold">Bagian Perekonomian & Kerja Sama</h1>
+                <p className="text-[10px] opacity-70">Kabupaten Tanah Laut — Role: {viewMode}</p>
+             </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-white/10 rounded-full relative">
+              <Bell size={18} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-[#1B4332]"></span>
+            </button>
+            <div className="flex items-center gap-2 bg-yellow-500 text-gray-900 px-3 py-1.5 rounded-full cursor-pointer">
+              <span className="text-[10px] font-bold uppercase">{viewMode === 'MITRA' ? 'Digitaliz' : viewMode}</span>
+              <User size={14} />
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-8">
+          
+          {/* VIEW: BUPATI */}
+          {viewMode === 'BUPATI' && (
+             <div className="animate-in fade-in duration-500 space-y-6">
+                <section>
+                  <h2 className="text-xl font-bold text-gray-800">Selamat datang, Bapak Bupati</h2>
+                  <p className="text-xs text-gray-500 mt-1">Ringkasan kerja sama daerah Kabupaten Tanah Laut — data per 21 April 2026</p>
+                </section>
+
+                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {statsBupati.map((s, i) => (
+                    <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
+                      <div className="flex justify-between items-start">
+                         <p className="text-xs font-medium opacity-90">{s.title}</p>
+                         {i > 1 && <ExternalLink size={14} className="opacity-40" />}
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold">{s.value}</p>
+                        <p className="text-[10px] opacity-70 mt-1">{s.sub}</p>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+
+                <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  <div className="lg:col-span-7 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-6">Distribusi kerja sama per jenis</h3>
+                    <div className="space-y-4">
+                      {distributionData.map((item, idx) => (
+                        <div key={idx} className="space-y-1">
+                          <div className="flex justify-between text-[10px] font-medium text-gray-600">
+                            <span>{item.label}</span>
+                            <span>{item.count} ({item.percent}%)</span>
+                          </div>
+                          <div className="w-full bg-gray-100 rounded-full h-2">
+                            <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.percent}%` }}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="lg:col-span-5 flex flex-col gap-4">
+                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex-1 text-center">
+                      <h3 className="font-bold text-sm text-gray-800 mb-4">Pipeline pengajuan saat ini</h3>
+                      <div className="grid grid-cols-5 gap-1">
+                        {pipelineData.map((item, idx) => (
+                          <div key={idx} className={`${item.bg} py-2 rounded-lg`}>
+                            <p className={`text-base font-bold ${item.color}`}>{item.count}</p>
+                            <p className="text-[7px] text-gray-500 font-bold uppercase">{item.label.split(' ')[0]}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-orange-50 border border-orange-200 p-4 rounded-xl flex items-start gap-3">
+                      <AlertTriangle size={18} className="text-orange-600 shrink-0" />
+                      <div>
+                        <h4 className="text-xs font-bold text-orange-800">KS akan berakhir 30 hari ke depan</h4>
+                        <p className="text-[10px] text-orange-700 mt-1 leading-relaxed">6 kerja sama mendekati masa berakhir — perlu perpanjangan</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  <div className="lg:col-span-8 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="p-5 border-b border-b-gray-100 flex justify-between items-center text-sm font-bold">KS aktif terbaru</div>
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-gray-50 text-gray-400 font-bold uppercase text-[9px]">
+                        <tr><th className="px-5 py-3">Mitra</th><th className="px-5 py-3">OPD</th><th className="px-5 py-3">Status</th></tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        <tr><td className="px-5 py-4 font-bold">Telkom Indonesia</td><td className="px-5 py-4">Diskominfo</td><td className="px-5 py-4"><span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[9px] font-bold">AKTIF</span></td></tr>
+                        <tr><td className="px-5 py-4 font-bold">Univ. Lambung Mangkurat</td><td className="px-5 py-4">Disdik</td><td className="px-5 py-4"><span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[9px] font-bold">AKTIF</span></td></tr>
+                        <tr><td className="px-5 py-4 font-bold">PLN UP3 Banjarmasin</td><td className="px-5 py-4">DPUPR</td><td className="px-5 py-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-[9px] font-bold">DIPROSES</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="lg:col-span-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-6">Top OPD pelaksana KS</h3>
+                    <div className="space-y-4">
+                      {topOPD.map((opd, i) => (
+                        <div key={i} className="space-y-1">
+                          <div className="flex justify-between text-[10px] font-bold text-gray-600"><span>{opd.name}</span><span>{opd.count}</span></div>
+                          <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                            <div className="bg-[#1B4332] h-full rounded-full" style={{ width: `${(opd.count/topOPD[0].count)*100}%` }}></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+             </div>
+          )}
+
+          {/* VIEW: ADMIN TKKSD */}
+          {viewMode === 'ADMIN' && (
+            <div className="animate-in fade-in duration-500 space-y-6">
+              <section>
+                <h2 className="text-xl font-bold text-gray-800">Dashboard Admin TKKSD</h2>
+                <p className="text-xs text-gray-500 mt-1">Kelola verifikasi, disposisi, dan monitoring kerja sama — 21 April 2026</p>
+              </section>
+
+              <div className="bg-orange-50 border border-orange-100 p-3.5 rounded-lg flex items-center gap-3 text-orange-700 text-[11px] font-medium">
+                <AlertTriangle size={16} />
+                <span>7 pengajuan menunggu verifikasi — 2 di antaranya sudah lebih dari 3 hari kerja</span>
+              </div>
+
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {statsAdmin.map((s, i) => (
+                  <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
+                    <p className="text-4xl font-bold">{s.value}</p>
+                    <div>
+                      <p className="text-[11px] font-bold leading-tight">{s.title}</p>
+                      {s.sub && <p className="text-[10px] mt-1 opacity-90 leading-tight">{s.sub}</p>}
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+              <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-8 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                  <div className="p-5 border-b border-b-gray-100 flex justify-between items-center text-sm font-bold text-gray-800">Antrian verifikasi pengajuan</div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-[11px]">
+                      <thead className="bg-gray-50 text-gray-400 font-bold uppercase text-[9px]">
+                        <tr><th className="px-5 py-3.5">ID</th><th className="px-5 py-3.5">Mitra</th><th className="px-5 py-3.5">Jenis</th><th className="px-5 py-3.5">Tgl Masuk</th><th className="px-5 py-3.5">Status</th><th className="px-5 py-3.5">Aksi</th></tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {verificationQueue.map((item, i) => (
+                          <tr key={i} className="hover:bg-gray-50">
+                            <td className="px-5 py-4 text-gray-400">{item.id}</td>
+                            <td className="px-5 py-4 font-bold text-gray-700">{item.mitra}</td>
+                            <td className="px-5 py-4 text-gray-500">{item.jenis}</td>
+                            <td className="px-5 py-4 text-gray-500">{item.tgl}</td>
+                            <td className="px-5 py-4"><span className={`px-2.5 py-1 rounded-md font-bold text-[9px] uppercase ${item.sColor}`}>{item.status}</span></td>
+                            <td className="px-5 py-4"><button className={`px-4 py-1.5 border rounded-lg font-bold text-[10px] ${item.aColor}`}>{item.action}</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="lg:col-span-4 space-y-6">
+                  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-4">Pipeline bulan ini</h3>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {[{v: 14, l: 'Baru', c: 'text-green-600', bg: 'bg-green-50'}, {v: 7, l: 'Verif', c: 'text-yellow-600', bg: 'bg-yellow-50'}, {v: 5, l: 'Disp', c: 'text-blue-600', bg: 'bg-blue-50'}, {v: 9, l: 'Proses', c: 'text-purple-600', bg: 'bg-purple-50'}, {v: 3, l: 'Selesai', c: 'text-emerald-600', bg: 'bg-emerald-50'}].map((p, i) => (
+                        <div key={i} className={`${p.bg} py-3 rounded-lg text-center`}><p className={`text-sm font-bold ${p.c}`}>{p.v}</p><p className="text-[7px] font-bold text-gray-400 uppercase mt-1 leading-none">{p.l}</p></div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-4">Notifikasi sistem</h3>
+                    <div className="space-y-5">
+                      {systemNotifications.map((n, i) => (
+                        <div key={i} className="flex gap-3 items-start"><div className={`w-2 h-2 rounded-full ${n.color} mt-1.5 shrink-0`}></div><div className="flex-1 min-w-0"><p className="text-[11px] text-gray-700 leading-tight">{n.text}</p><p className="text-[10px] text-gray-400 mt-1">{n.time}</p></div></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* VIEW: OPD (SESUAI image_b4e93d.png) */}
+          {viewMode === 'OPD' && (
+            <div className="animate-in slide-in-from-right duration-500 space-y-6">
+              <section>
+                <h2 className="text-xl font-bold text-gray-800">Dashboard OPD — Diskominfo</h2>
+                <p className="text-xs text-gray-500 mt-1">Kelola pelaksanaan kerja sama yang didisposisi ke dinas Anda</p>
+              </section>
+
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-5 rounded-xl bg-[#1B4332] text-white shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold">8</p><p className="text-xs font-medium">KS aktif di dinas ini</p></div>
+                <div className="p-5 rounded-xl bg-[#F39C12] text-white shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold">2</p><p className="text-xs font-medium">Disposisi baru masuk</p></div>
+                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold text-gray-800">3</p><div><p className="text-xs font-medium text-gray-500">Laporan jatuh tempo</p><p className="text-[10px] text-red-500 font-bold mt-1">Perlu segera dikirim</p></div></div>
+                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold text-gray-800">2</p><p className="text-xs font-medium text-gray-500">KS berakhir bulan ini</p></div>
+              </section>
+
+              <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-8 space-y-4">
+                  <div className="flex justify-between items-center px-1"><h3 className="font-bold text-sm text-gray-800">Kerja sama aktif</h3><button className="text-xs text-gray-400 flex items-center gap-1">Lihat semua <ArrowRight size={12}/></button></div>
+                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-5">
+                    <div className="flex justify-between items-start"><div><h4 className="font-bold text-sm text-gray-800">Kerja Sama Smart City — Telkom Indonesia</h4><p className="text-[10px] text-gray-400 mt-1">KS-2026-0031 · Mulai: 1 Mar 2026 · Berakhir: 28 Feb 2027</p></div><span className="text-[10px] font-bold px-2 py-1 rounded-md bg-green-50 text-green-600">Aktif</span></div>
+                    <div className="space-y-2"><div className="flex justify-between text-[10px] font-bold"><span className="text-gray-400 uppercase">Progress pelaksanaan</span><span className="text-[#1B4332]">65%</span></div><div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#1B4332] rounded-full" style={{ width: '65%' }}></div></div></div>
+                    <div className="flex gap-2"><button className="px-4 py-1.5 border border-[#1B4332] rounded-lg text-[10px] font-bold text-[#1B4332]">Update Progress</button><button className="px-4 py-1.5 border border-yellow-500 rounded-lg text-[10px] font-bold text-yellow-700">Kirim Laporan</button></div>
+                  </div>
+                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-5">
+                    <div className="flex justify-between items-start"><div><h4 className="font-bold text-sm text-gray-800">Pengembangan SDM Digital — Digitaliz</h4><p className="text-[10px] text-gray-400 mt-1">KS-2026-0028 · Mulai: 15 Feb 2026 · Berakhir: 15 Aug 2026</p></div><span className="text-[10px] font-bold px-2 py-1 rounded-md bg-blue-50 text-blue-600">Diproses</span></div>
+                    <div className="space-y-2"><div className="flex justify-between text-[10px] font-bold"><span className="text-gray-400 uppercase">Progress pelaksanaan</span><span className="text-yellow-500">40%</span></div><div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div className="h-full bg-yellow-500 rounded-full" style={{ width: '40%' }}></div></div></div>
+                    <div className="flex gap-2"><button className="px-4 py-1.5 border border-[#1B4332] rounded-lg text-[10px] font-bold text-[#1B4332]">Update Progress</button><button className="px-4 py-1.5 border border-yellow-500 rounded-lg text-[10px] font-bold text-yellow-700">Kirim Laporan</button></div>
+                  </div>
+                  <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-5">
+                    <div className="flex justify-between items-start"><div><h4 className="font-bold text-sm text-gray-800">Sistem Informasi Daerah — Kominfo RI</h4><p className="text-[10px] text-gray-400 mt-1">KS-2025-0094 · Berakhir: 30 Apr 2026</p></div><span className="text-[10px] font-bold px-2 py-1 rounded-md bg-red-50 text-red-500">9 hari lagi</span></div>
+                    <div className="space-y-2"><div className="flex justify-between text-[10px] font-bold"><span className="text-gray-400 uppercase">Progress pelaksanaan</span><span className="text-[#1B4332]">90%</span></div><div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden"><div className="h-full bg-[#1B4332] rounded-full" style={{ width: '90%' }}></div></div></div>
+                    <div className="p-2.5 bg-orange-50 border border-orange-100 rounded-lg flex items-center gap-2 text-orange-700 text-[10px] font-bold"><AlertTriangle size={14} /><span>Segera kirim laporan akhir sebelum KS berakhir</span></div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-4 space-y-6">
+                  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-4">Disposisi baru masuk</h3>
+                    <div className="p-4 border border-dashed border-gray-300 rounded-xl bg-white space-y-2"><p className="text-[11px] font-bold text-gray-800 leading-tight">KS-2026-0042 — Digitaliz (Smart City)</p><p className="text-[10px] text-gray-400">Dari: Admin TKKSD · 20 Apr 2026</p><p className="text-[11px] text-gray-600 italic">"Catatan: Koordinasikan jadwal kick-off dengan tim teknis Digitaliz minggu ini"</p><div className="flex gap-2 pt-2"><button className="flex-1 py-1.5 bg-[#1B4332] text-white text-[11px] font-bold rounded-lg">Terima</button><button className="flex-1 py-1.5 border border-red-500 text-red-600 text-[11px] font-bold rounded-lg">Feedback Teknis</button></div></div>
+                  </div>
+                  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-4">Deadline laporan</h3>
+                    <div className="space-y-4"><div className="flex justify-between items-center text-[11px]"><span className="text-gray-600">Laporan bulanan — Smart City</span><span className="text-red-500 font-bold">25 Apr 2026</span></div><div className="flex justify-between items-center text-[11px]"><span className="text-gray-600">Laporan akhir — Sistem Informasi</span><span className="text-red-500 font-bold">29 Apr 2026</span></div><div className="flex justify-between items-center text-[11px]"><span className="text-gray-600">Laporan Q2 — SDM Digital</span><span className="text-green-700 font-bold">30 Jun 2026</span></div></div>
+                  </div>
+                  <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="font-bold text-sm text-gray-800 mb-4">Notifikasi</h3>
+                    <div className="space-y-5"><div className="flex gap-3 items-start"><div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></div><div className="flex-1 min-w-0"><p className="text-[11px] text-gray-700 leading-tight">KS-2025-0094 berakhir dalam 9 hari — segera kirim laporan akhir</p><p className="text-[10px] text-gray-400 mt-1">Hari ini</p></div></div><div className="flex gap-3 items-start"><div className="w-2 h-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></div><div className="flex-1 min-w-0"><p className="text-[11px] text-gray-700 leading-tight">2 disposisi baru dari Admin TKKSD menunggu konfirmasi Anda</p><p className="text-[10px] text-gray-400 mt-1">1 jam lalu</p></div></div><div className="flex gap-3 items-start"><div className="w-2 h-2 rounded-full bg-[#1B4332] mt-1.5 shrink-0"></div><div className="flex-1 min-w-0"><p className="text-[11px] text-gray-700 leading-tight">Laporan bulan Maret berhasil dikirim ke Admin TKKSD</p><p className="text-[10px] text-gray-400 mt-1">2 Apr</p></div></div></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* VIEW: MITRA (SESUAI image_b4da93.png) */}
+          {viewMode === 'MITRA' && (
+            <div className="animate-in fade-in duration-500 space-y-6">
+               <section>
+                 <h2 className="text-xl font-bold text-gray-800">Halo, Digitaliz!</h2>
+                 <p className="text-xs text-gray-500 mt-1">Pantau status kerja sama dan pengajuan Anda di sini</p>
+               </section>
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {statsMitra.map((s, i) => (
+                  <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
+                    <p className="text-4xl font-bold">{s.value}</p>
+                    <p className="text-xs font-medium uppercase tracking-wider">{s.title}</p>
+                  </div>
+                ))}
+               </div>
+
+               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                 {/* Kolom Kiri: Status Pengajuan */}
+                 <div className="lg:col-span-8 space-y-4">
+                   <div className="flex justify-between items-center px-1">
+                     <h3 className="font-bold text-sm text-gray-800">Status pengajuan terbaru</h3>
+                     <button className="text-[11px] text-gray-400 flex items-center gap-1 hover:text-[#1B4332]">
+                       Lihat semua <ArrowRight size={12}/>
+                     </button>
+                   </div>
+
+                   {/* Main Progress Card */}
+                   <div className="bg-white p-6 rounded-xl border border-yellow-200 bg-yellow-50/20 shadow-sm space-y-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-sm text-[#B7791F]">KS-2026-0042 — Kerja Sama Smart City</h4>
+                          <p className="text-[10px] text-gray-400 mt-1">Diajukan 20 April 2026 · Jenis: Swasta</p>
+                        </div>
+                      </div>
+
+                      {/* Stepper Progres */}
+                      <div className="relative pt-2 pb-6 px-4">
+                        <div className="absolute top-[35%] left-[10%] right-[10%] h-[1px] bg-gray-200"></div>
+                        <div className="flex justify-between relative z-10">
+                          {[
+                            { l: 'Diajukan', active: true, done: true },
+                            { l: 'Diverifikasi', active: true, current: true, n: '2' },
+                            { l: 'Disposisi', active: false, n: '3' },
+                            { l: 'Diproses', active: false, n: '4' },
+                            { l: 'Selesai', active: false, n: '5' }
+                          ].map((step, i) => (
+                            <div key={i} className="flex flex-col items-center gap-3">
+                               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold border-2 ${step.done ? 'bg-[#1B4332] border-[#1B4332] text-white' : step.current ? 'bg-[#F39C12] border-[#F39C12] text-white' : 'bg-white border-gray-100 text-gray-300'}`}>
+                                  {step.done ? <Check size={14} strokeWidth={3} /> : step.n}
+                               </div>
+                               <span className={`text-[10px] font-bold uppercase tracking-tighter ${step.active ? 'text-green-800' : 'text-gray-300'}`}>
+                                 {step.l}
+                               </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-[#B7791F] font-bold text-center italic">
+                        Tim sedang memverifikasi dokumen Anda. Est. 3-5 hari kerja.
+                      </p>
+                   </div>
+
+                   {/* Other Simple Cards */}
+                   {[
+                     { id: 'KS-2026-0031', t: 'Pengembangan SDM Digital', d: 'Diajukan 5 Maret 2026 · Diskominfo', s: 'Diproses', sc: 'text-blue-600 bg-blue-50' },
+                     { id: 'KS-2025-0089', t: 'Digitalisasi Pelayanan', d: 'Selesai 10 Des 2025 · Setda', s: 'Selesai', sc: 'text-purple-600 bg-purple-50' }
+                   ].map((item, i) => (
+                     <div key={i} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300">
+                             <FileText size={20} />
+                          </div>
+                          <div>
+                            <h4 className="text-[11px] font-bold text-gray-700">{item.id} — {item.t}</h4>
+                            <p className="text-[10px] text-gray-400">{item.d}</p>
+                          </div>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase ${item.sc}`}>{item.s}</span>
+                     </div>
+                   ))}
+                 </div>
+
+                 {/* Kolom Kanan: Notifikasi & Aksi */}
+                 <div className="lg:col-span-4 space-y-6">
+                    {/* Notifikasi terbaru */}
+                    <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                      <h3 className="font-bold text-sm text-gray-800 mb-4">Notifikasi terbaru</h3>
+                      <div className="space-y-5">
+                        {mitraNotifications.map((n, i) => (
+                          <div key={i} className="flex gap-3 items-start">
+                            <div className={`w-2 h-2 rounded-full ${n.color} mt-1.5 shrink-0`}></div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[11px] text-gray-700 leading-tight">{n.text}</p>
+                              <p className="text-[10px] text-gray-400 mt-1">{n.time}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Aksi cepat */}
+                    <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+                      <h3 className="font-bold text-sm text-gray-800 mb-4">Aksi cepat</h3>
+                      <div className="space-y-2.5">
+                        <button className="w-full py-2.5 bg-[#1B4332] text-white text-[11px] font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-green-800 transition-colors">
+                          <PlusCircle size={14} /> + Ajukan kerja sama baru
+                        </button>
+                        <button className="w-full py-2.5 bg-green-50 text-[#1B4332] text-[11px] font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-green-100 transition-colors border border-green-100">
+                          <Download size={14} /> ↓ Unduh MoU terakhir
+                        </button>
+                        <button className="w-full py-2.5 bg-[#FEF3C7] text-[#92400E] text-[11px] font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-[#FDE68A] transition-colors border border-[#FDE68A]">
+                          <MessageSquare size={14} /> ? Konsultasi via WhatsApp
+                        </button>
+                      </div>
+                    </div>
+                 </div>
+               </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default App;
