@@ -37,10 +37,10 @@ const App = () => {
 
   // --- DATA MOCK BUPATI ---
   const statsBupati = [
-    { title: "Total Kerja Sama", value: "857", sub: "+12% tahun ini", color: "bg-[#1B4332] text-white" },
-    { title: "Mitra Aktif", value: "1.024", sub: "se-Indonesia", color: "bg-[#F39C12] text-white" },
-    { title: "KS Internasional", value: "23", sub: "9 negara", color: "bg-white text-gray-800 border border-gray-100" },
-    { title: "Realisasi 2026", value: "98%", sub: "Tepat waktu", color: "bg-white text-gray-800 border border-gray-100" },
+    { title: "Total Kerja Sama", value: "857", sub: "+12% tahun ini", color: "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white border-none", icon: <Briefcase /> },
+    { title: "Mitra Aktif", value: "1.024", sub: "se-Indonesia", color: "bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white border-none", icon: <Users /> },
+    { title: "KS Internasional", value: "23", sub: "9 negara", color: "bg-white text-gray-800 border border-gray-100", icon: <LayoutGrid className="text-[#3498DB]" /> },
+    { title: "Realisasi 2026", value: "98%", sub: "Tepat waktu", color: "bg-white text-gray-800 border border-gray-100", icon: <TrendingUp className="text-[#27AE60]" /> },
   ];
 
   const distributionData = [
@@ -68,12 +68,19 @@ const App = () => {
     { name: "Dinas Pertanian", count: 17 },
   ];
 
+  const potentialPartners = [
+    { name: "PT Aplikasi Karya Anak Bangsa", type: "Perusahaan Teknologi", match: 94, opd: ["Dinas Pariwisata", "Dinas Koperasi & UKM", "Diskominfo"], icon: "AK", color: "bg-green-100 text-green-700" },
+    { name: "PT Bio Farma (Persero)", type: "BUMN - Kesehatan", match: 88, opd: ["Dinas Kesehatan", "RSUD Boejasin"], icon: "BF", color: "bg-blue-100 text-blue-700" },
+    { name: "JICA Indonesia", type: "Lembaga Internasional", match: 85, opd: ["Bappeda", "Dinas PUPRP", "Dinas LHK"], icon: "JI", color: "bg-purple-100 text-purple-700" },
+    { name: "PT Pupuk Indonesia", type: "BUMN - Agrikultur", match: 82, opd: ["Dinas Pertanian", "DKPP"], icon: "PI", color: "bg-orange-100 text-orange-700" }
+  ];
+
   // --- DATA MOCK ADMIN TKKSD ---
   const statsAdmin = [
-    { title: "Total pengajuan bulan ini", value: "38", sub: "+8 dari bulan lalu", color: "bg-[#1B4332] text-white" },
-    { title: "Menunggu verifikasi", value: "7", sub: "", color: "bg-[#F39C12] text-white" },
-    { title: "Perlu tindakan segera", value: "2", sub: "", color: "bg-[#C0392B] text-white" },
-    { title: "KS aktif bulan ini", value: "14", sub: "3 selesai", color: "bg-white text-gray-800 border border-gray-100" },
+    { title: "Total pengajuan bulan ini", value: "38", sub: "+8 dari bulan lalu", color: "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white border-none", icon: <FileText /> },
+    { title: "Menunggu verifikasi", value: "7", sub: "2 lebih dari 3 hari", color: "bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white border-none", icon: <Clock /> },
+    { title: "Perlu tindakan segera", value: "2", sub: "Segera tindak lanjuti", color: "bg-gradient-to-br from-[#C0392B] to-[#A93226] text-white border-none", icon: <AlertTriangle /> },
+    { title: "KS aktif bulan ini", value: "14", sub: "3 selesai", color: "bg-white text-gray-800 border border-gray-100", icon: <Check className="text-[#27AE60]" /> },
   ];
 
   const verificationQueue = [
@@ -93,9 +100,9 @@ const App = () => {
 
   // --- DATA MOCK MITRA (image_b4da93.png) ---
   const statsMitra = [
-    { title: "Pengajuan Aktif", value: "3", color: "bg-[#1B4332] text-white" },
-    { title: "Sedang Diverifikasi", value: "1", color: "bg-[#F39C12] text-white" },
-    { title: "KS Selesai", value: "2", color: "bg-white text-gray-400 border border-gray-100" },
+    { title: "Pengajuan Aktif", value: "3", color: "bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white border-none", icon: <FileText size={32} className="opacity-40" /> },
+    { title: "Sedang Diverifikasi", value: "1", color: "bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white border-none", icon: <Clock size={32} className="opacity-40" /> },
+    { title: "KS Selesai", value: "2", color: "bg-white text-gray-800 border border-gray-100", icon: <Check size={32} className="text-[#27AE60] opacity-40" /> },
   ];
 
   const mitraNotifications = [
@@ -387,9 +394,9 @@ const App = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden relative">
         {/* Navbar */}
-        <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-10 relative">
+        <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-50 relative">
           <div className="flex items-center gap-4">
              <div className="hidden sm:flex flex-col">
                 <h1 className="text-sm font-bold">Bagian Perekonomian & Kerja Sama</h1>
@@ -456,14 +463,22 @@ const App = () => {
 
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {statsBupati.map((s, i) => (
-                    <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
-                      <div className="flex justify-between items-start">
-                         <p className="text-xs font-medium opacity-90">{s.title}</p>
-                         {i > 1 && <ExternalLink size={14} className="opacity-40" />}
+                    <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
+                      <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i > 1 ? 'opacity-10' : 'opacity-20'}`}>
+                        {React.cloneElement(s.icon as React.ReactElement, { size: 80 })}
                       </div>
-                      <div>
-                        <p className="text-2xl font-bold">{s.value}</p>
-                        <p className="text-[10px] opacity-70 mt-1">{s.sub}</p>
+                      <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+                      <div className="flex justify-between items-start relative z-10 w-full mb-2">
+                        <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                        {i > 1 && <ExternalLink size={16} className="opacity-40" />}
+                      </div>
+                      <div className="relative z-10">
+                        <p className="text-xs font-bold uppercase tracking-wider opacity-90 drop-shadow-sm line-clamp-1">{s.title}</p>
+                        {s.sub && (
+                          <p className={`text-[10px] mt-1.5 font-bold inline-block px-2.5 py-0.5 rounded-full ${i > 1 ? 'bg-gray-100 text-gray-600' : 'bg-black/10 text-white'}`}>
+                            {s.sub}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -536,6 +551,41 @@ const App = () => {
                     </div>
                   </div>
                 </section>
+
+                <section className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-bold text-sm text-gray-800">Rekomendasi Mitra Potensial</h3>
+                    <button className="text-[11px] text-[#1B4332] font-bold hover:underline">Lihat semua kandidat</button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {potentialPartners.map((partner, idx) => (
+                      <div key={idx} className="p-4 border border-gray-100 rounded-xl hover:border-green-200 hover:shadow-md transition-all group bg-gray-50/50 flex flex-col justify-between h-full">
+                        <div>
+                          <div className="flex justify-between items-start mb-3">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg shrink-0 ${partner.color}`}>
+                              {partner.icon}
+                            </div>
+                            <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-md">
+                              <TrendingUp size={10} />
+                              <span className="text-[10px] font-bold">{partner.match}% Cocok</span>
+                            </div>
+                          </div>
+                          <h4 className="font-bold text-[13px] text-gray-800 leading-tight mb-1 group-hover:text-[#1B4332] transition-colors">{partner.name}</h4>
+                          <p className="text-[10px] text-gray-500 font-medium mb-4">{partner.type}</p>
+                        </div>
+                        
+                        <div className="mt-auto border-t border-gray-100 pt-3">
+                          <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-2">Potensi Sinergi OPD:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {partner.opd.map((o, i) => (
+                              <span key={i} className="text-[9px] bg-white border border-gray-200 text-gray-600 px-2 py-0.5 rounded shadow-sm">{o}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
              </div>
           )}
 
@@ -554,11 +604,21 @@ const App = () => {
 
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {statsAdmin.map((s, i) => (
-                  <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
-                    <p className="text-4xl font-bold">{s.value}</p>
-                    <div>
-                      <p className="text-[11px] font-bold leading-tight">{s.title}</p>
-                      {s.sub && <p className="text-[10px] mt-1 opacity-90 leading-tight">{s.sub}</p>}
+                  <div key={i} className={`p-5 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
+                    <div className={`absolute -right-4 -bottom-4 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-75 ${i === 3 ? 'opacity-10' : 'opacity-20'}`}>
+                      {React.cloneElement(s.icon as React.ReactElement, { size: 80 })}
+                    </div>
+                    <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+                    <div className="flex justify-between items-start relative z-10 w-full mb-2">
+                      <p className="text-5xl font-extrabold tracking-tight drop-shadow-sm">{s.value}</p>
+                    </div>
+                    <div className="relative z-10">
+                      <p className="text-xs font-bold uppercase tracking-wider opacity-90 drop-shadow-sm line-clamp-1">{s.title}</p>
+                      {s.sub && (
+                        <p className={`text-[10px] mt-1.5 font-bold inline-block px-2.5 py-0.5 rounded-full ${i === 3 ? 'bg-gray-100 text-gray-600' : 'bg-black/10 text-white'}`}>
+                          {s.sub}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -618,10 +678,31 @@ const App = () => {
               </section>
 
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-5 rounded-xl bg-[#1B4332] text-white shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold">8</p><p className="text-xs font-medium">KS aktif di dinas ini</p></div>
-                <div className="p-5 rounded-xl bg-[#F39C12] text-white shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold">2</p><p className="text-xs font-medium">Disposisi baru masuk</p></div>
-                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold text-gray-800">3</p><div><p className="text-xs font-medium text-gray-500">Laporan jatuh tempo</p><p className="text-[10px] text-red-500 font-bold mt-1">Perlu segera dikirim</p></div></div>
-                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between"><p className="text-4xl font-bold text-gray-800">2</p><p className="text-xs font-medium text-gray-500">KS berakhir bulan ini</p></div>
+                <div className="p-5 rounded-xl bg-gradient-to-br from-[#1B4332] to-[#2D6A4F] text-white shadow-lg h-32 flex flex-col justify-between relative overflow-hidden group">
+                  <Briefcase size={64} className="absolute -right-4 -bottom-4 text-white opacity-10 group-hover:scale-110 transition-transform" />
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+                  <p className="text-5xl font-extrabold relative z-10 tracking-tight">8</p>
+                  <p className="text-xs font-bold uppercase tracking-wider relative z-10 opacity-90 drop-shadow-sm">KS aktif di dinas ini</p>
+                </div>
+                <div className="p-5 rounded-xl bg-gradient-to-br from-[#F39C12] to-[#D68910] text-white shadow-lg h-32 flex flex-col justify-between relative overflow-hidden group">
+                  <Inbox size={64} className="absolute -right-4 -bottom-4 text-white opacity-10 group-hover:scale-110 transition-transform" />
+                  <div className="absolute top-0 left-0 w-20 h-20 bg-white/5 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
+                  <p className="text-5xl font-extrabold relative z-10 tracking-tight">2</p>
+                  <p className="text-xs font-bold uppercase tracking-wider relative z-10 opacity-90 drop-shadow-sm">Disposisi baru masuk</p>
+                </div>
+                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between relative overflow-hidden group">
+                  <FileText size={64} className="absolute -right-4 -bottom-4 text-red-500 opacity-5 group-hover:scale-110 transition-transform" />
+                  <p className="text-5xl font-extrabold text-gray-800 relative z-10 tracking-tight">3</p>
+                  <div className="relative z-10">
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-600">Laporan jatuh tempo</p>
+                    <p className="text-[10px] text-red-600 font-bold mt-1.5 bg-red-50 inline-block px-2 py-0.5 rounded-full">Perlu segera dikirim</p>
+                  </div>
+                </div>
+                <div className="p-5 rounded-xl bg-white border border-gray-100 shadow-sm h-32 flex flex-col justify-between relative overflow-hidden group">
+                  <Clock size={64} className="absolute -right-4 -bottom-4 text-orange-500 opacity-5 group-hover:scale-110 transition-transform" />
+                  <p className="text-5xl font-extrabold text-gray-800 relative z-10 tracking-tight">2</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-600 relative z-10">KS berakhir bulan ini</p>
+                </div>
               </section>
 
               <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -672,9 +753,13 @@ const App = () => {
 
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {statsMitra.map((s, i) => (
-                  <div key={i} className={`p-5 rounded-xl ${s.color} shadow-sm h-32 flex flex-col justify-between`}>
-                    <p className="text-4xl font-bold">{s.value}</p>
-                    <p className="text-xs font-medium uppercase tracking-wider">{s.title}</p>
+                  <div key={i} className={`p-6 rounded-2xl ${s.color} shadow-lg h-36 flex flex-col justify-between relative overflow-hidden group`}>
+                    <div className="absolute -right-6 -bottom-6 opacity-20 transform rotate-12 group-hover:scale-125 transition-transform duration-500 delay-100">
+                      {React.cloneElement(s.icon as React.ReactElement, { size: 90 })}
+                    </div>
+                    <div className="absolute -left-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+                    <p className="text-6xl font-extrabold relative z-10 tracking-tight drop-shadow-sm">{s.value}</p>
+                    <p className="text-xs font-bold uppercase tracking-wider relative z-10 opacity-90 drop-shadow-sm">{s.title}</p>
                   </div>
                 ))}
                </div>
