@@ -363,7 +363,7 @@ const App = () => {
           <div className="w-8 h-8 bg-yellow-500 rounded flex items-center justify-center text-white font-bold shrink-0">TL</div>
           {isSidebarOpen && (
             <div className="text-white overflow-hidden whitespace-nowrap">
-              <p className="text-xs font-bold leading-tight">Bagian Perekonomian</p>
+              <p className="text-xs font-bold leading-tight">Bagian Pemerintahan</p>
               <p className="text-[10px] opacity-80 leading-tight">& Kerja Sama</p>
             </div>
           )}
@@ -429,7 +429,7 @@ const App = () => {
         <header className="h-16 bg-[#1B4332] text-white flex items-center justify-between px-6 shrink-0 z-50 relative">
           <div className="flex items-center gap-4">
              <div className="hidden sm:flex flex-col">
-                <h1 className="text-sm font-bold">Bagian Perekonomian & Kerja Sama</h1>
+                <h1 className="text-sm font-bold">Bagian Pemerintahan & Kerja Sama</h1>
                 <p className="text-[10px] opacity-70">Kabupaten Tanah Laut — Role: {viewMode}</p>
              </div>
           </div>
