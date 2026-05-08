@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react';
-import { ArrowLeft, FileUp, Check } from 'lucide-react';
+import { ArrowLeft, FileUp, CheckCircle2, FileText } from 'lucide-react';
 import type { ViewMode } from '../../types';
 import DemoModeDropdown from '../common/DemoModeDropdown';
 
@@ -50,252 +50,280 @@ const FormView = ({
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans p-4 md:p-8">
-            <div className="max-w-6xl mx-auto space-y-12">
-                <div className="flex items-center justify-between relative z-50">
-                <button
-                    onClick={onBackToDashboard}
-                    className="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-medium"
-                >
-                    <ArrowLeft size={18} /> Kembali ke Dashboard
-                </button>
-                <DemoModeDropdown
-                    viewMode={viewMode}
-                    isOpen={isDemoDropdownOpen}
-                    label="Ganti Tampilan Demo"
-                    onToggle={onToggleDemoDropdown}
-                    onClose={onCloseDemoDropdown}
-                    onSelect={onSelectViewMode}
-                    buttonClassName="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-yellow-500 text-gray-900 border rounded-full hover:bg-yellow-400"
+        <div className="min-h-screen bg-gray-50 font-sans">
+            <section className="relative pt-28 pb-20 overflow-hidden bg-[linear-gradient(135deg,#1B4332_0%,#2D6A4F_55%,#14532D_100%)]">
+                <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                        backgroundImage: "radial-gradient(circle at 20% 20%, white 1px, transparent 1px), radial-gradient(circle at 80% 80%, white 1px, transparent 1px)",
+                        backgroundSize: "40px 40px"
+                    }}
                 />
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                {[
-                    { num: '01', title: 'Daftar / Masuk', sub: 'Buat akun atau masuk dengan akun Anda.' },
-                    { num: '02', title: 'Isi Formulir', sub: 'Lengkapi data instansi dan tujuan kerja sama.', active: true },
-                    { num: '03', title: 'Unggah Dokumen', sub: 'Lampirkan proposal dan dokumen pendukung.' },
-                    { num: '04', title: 'Verifikasi', sub: 'Tim memverifikasi dalam 5 hari kerja.' },
-                    { num: '05', title: 'MoU', sub: 'Penjadwalan penandatanganan kesepakatan.' }
-                ].map((step, i) => (
-                    <div key={i} className="flex flex-col items-center text-center p-4">
-                        <span className={`text-xl font-extrabold ${step.active ? 'text-[#F39C12]' : 'text-gray-300'}`}>{step.num}</span>
-                        <h3 className={`text-sm font-bold mt-2 ${step.active ? 'text-[#1B4332]' : 'text-gray-400'}`}>{step.title}</h3>
-                        <p className="text-[10px] text-gray-400 mt-1 leading-tight">{step.sub}</p>
+                <div className="max-w-6xl mx-auto px-4 md:px-8 relative text-white text-center">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-bold tracking-widest uppercase mb-4">
+                        Layanan
                     </div>
-                ))}
-            </div>
+                    <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">Pengajuan Kerja Sama Daerah</h1>
+                    <p className="mt-4 max-w-2xl mx-auto text-lg opacity-90">Ajukan permohonan kerja sama daerah Anda secara online.</p>
+                </div>
+            </section>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <div className="lg:col-span-8 bg-white rounded-3xl shadow-sm p-8 md:p-12 space-y-8">
-                    <h2 className="text-2xl font-extrabold text-[#1B4332]">Formulir Pengajuan</h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700">Nama instansi/perusahaan</label>
-                            <input
-                                type="text"
-                                placeholder="Nama instansi atau perusahaan"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700">Jenis pihak ketiga</label>
-                            <input
-                                type="text"
-                                placeholder="Swasta / Pemerintah / Perguruan Tinggi"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700">PIC</label>
-                            <input
-                                type="text"
-                                placeholder="Nama lengkap"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700">Kontak</label>
-                            <input
-                                type="text"
-                                placeholder="Email atau nomor telepon"
-                                className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Latar belakang</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Jelaskan latar belakang kerja sama..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Dasar hukum</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Cantumkan dasar hukum yang relevan..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Maksud & tujuan</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Jelaskan maksud dan tujuan..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Objek kerja sama</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Jelaskan objek kerja sama..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Ruang lingkup</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Jelaskan ruang lingkup kerja sama..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Aktivitas/kegiatan</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Rincikan aktivitas atau kegiatan..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Jangka waktu</label>
-                        <input
-                            type="text"
-                            placeholder="Contoh: 12 bulan"
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Analisis manfaat & biaya</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Jelaskan manfaat dan biaya..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Kesimpulan/rekomendasi</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Tuliskan kesimpulan atau rekomendasi..."
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
-                        ></textarea>
-                    </div>
-
-                    <input
-                        ref={uploadInputRef}
-                        type="file"
-                        accept="application/pdf"
-                        onChange={handleUploadChange}
-                        className="hidden"
-                    />
-                    <div
-                        onClick={handleOpenFileDialog}
-                        className="border-2 border-dashed border-gray-200 rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-4 hover:bg-gray-50 transition-colors cursor-pointer group"
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter' || event.key === ' ') {
-                                event.preventDefault();
-                                handleOpenFileDialog();
-                            }
-                        }}
+            <div className="max-w-6xl mx-auto px-4 md:px-8 py-14 space-y-12">
+                <div className="flex items-center justify-between relative z-50">
+                    <button
+                        onClick={onBackToDashboard}
+                        className="flex items-center gap-2 text-gray-500 hover:text-gray-800 font-medium"
                     >
-                        <div className="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center text-[#1B4332] group-hover:scale-110 transition-transform">
-                            <FileUp size={32} />
+                        <ArrowLeft size={18} /> Kembali ke Dashboard
+                    </button>
+                    <DemoModeDropdown
+                        viewMode={viewMode}
+                        isOpen={isDemoDropdownOpen}
+                        label="Ganti Tampilan Demo"
+                        onToggle={onToggleDemoDropdown}
+                        onClose={onCloseDemoDropdown}
+                        onSelect={onSelectViewMode}
+                        buttonClassName="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-[#F39C12] text-gray-900 rounded-full hover:bg-[#F7B731]"
+                    />
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {[
+                        { num: '01', title: 'Daftar / Masuk', sub: 'Buat akun atau masuk dengan akun Anda.' },
+                        { num: '02', title: 'Isi Formulir', sub: 'Lengkapi data instansi dan tujuan kerja sama.', active: true },
+                        { num: '03', title: 'Unggah Dokumen', sub: 'Lampirkan proposal dan dokumen pendukung.' },
+                        { num: '04', title: 'Verifikasi', sub: 'Tim memverifikasi dalam 5 hari kerja.' },
+                        { num: '05', title: 'MoU', sub: 'Penjadwalan penandatanganan kesepakatan.' }
+                    ].map((step, i) => (
+                        <div key={i} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm text-center">
+                            <div className={`text-3xl font-extrabold ${step.active ? 'text-[#F39C12]' : 'text-gray-300'}`}>{step.num}</div>
+                            <div className={`font-bold mt-1 ${step.active ? 'text-[#1B4332]' : 'text-gray-400'}`}>{step.title}</div>
+                            <div className="text-xs text-gray-400 mt-1">{step.sub}</div>
                         </div>
+                    ))}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="lg:col-span-8 bg-white border border-gray-100 rounded-3xl p-8 md:p-12 shadow-sm space-y-8">
                         <div>
-                            <h4 className="text-lg font-bold text-gray-700">Upload studi kelayakan/proposal</h4>
-                            <p className="text-xs text-gray-400 mt-1">Maksimal 1 dokumen (PDF)</p>
+                            <h2 className="text-2xl font-extrabold text-[#1B4332]">Formulir Pengajuan Kerja Sama</h2>
+                            <p className="text-sm text-gray-500 mt-1">Lengkapi seluruh data berikut dengan benar.</p>
                         </div>
-                    </div>
-                    {uploadError && (
-                        <p className="text-xs text-red-600 font-semibold">{uploadError}</p>
-                    )}
-                    {uploadFile && (
-                        <div className="border border-gray-100 rounded-2xl p-4 bg-gray-50 flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-4 min-w-0">
-                                <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 flex items-center justify-center text-[#1B4332]">
-                                    <FileUp size={18} />
+
+                        <section>
+                            <h3 className="font-bold text-[#1B4332] mb-4 flex items-center gap-2">
+                                <span className="h-1 w-6 bg-[#F39C12] rounded-full" /> Data Pemohon
+                            </h3>
+                            <div className="grid sm:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Nama Instansi / Perusahaan</label>
+                                    <input
+                                        type="text"
+                                        placeholder="PT / Universitas / Pemda ..."
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
                                 </div>
-                                <div className="min-w-0">
-                                    <p className="text-sm font-bold text-gray-700 truncate">{uploadFile.name}</p>
-                                    <p className="text-[10px] text-gray-400">{formatFileSize(uploadFile.size)}</p>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Jenis Pihak Ketiga</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Swasta / BUMN / Perguruan Tinggi / NGO"
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">PIC (Penanggung Jawab)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Nama lengkap PIC"
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Kontak (No. HP / WhatsApp)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="+62 ..."
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
+                                </div>
+                                <div className="space-y-2 sm:col-span-2">
+                                    <label className="text-sm font-bold text-gray-700">Email</label>
+                                    <input
+                                        type="email"
+                                        placeholder="email@instansi.id"
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
                                 </div>
                             </div>
-                            <button
-                                type="button"
-                                onClick={handleRemoveUpload}
-                                className="text-[10px] font-bold text-red-600 border border-red-200 px-3 py-1.5 rounded-lg hover:bg-red-50"
-                            >
-                                Hapus
-                            </button>
-                        </div>
-                    )}
+                        </section>
 
-                    <div className="flex justify-end pt-4">
-                        <button className="bg-[#1B4332] text-white font-bold px-12 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-95">
+                        <section>
+                            <h3 className="font-bold text-[#1B4332] mb-4 flex items-center gap-2">
+                                <span className="h-1 w-6 bg-[#F39C12] rounded-full" /> Substansi Kerja Sama
+                            </h3>
+                            <div className="grid gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Judul Kerja Sama</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Contoh: Kerja sama Smart City Tanah Laut"
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Latar Belakang</label>
+                                    <textarea
+                                        rows={4}
+                                        placeholder="Jelaskan kondisi/permasalahan yang melatari kerja sama..."
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Dasar Hukum</label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="UU / PP / Perda / Peraturan terkait"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Maksud & Tujuan</label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Maksud dan tujuan kerja sama..."
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Objek Kerja Sama</label>
+                                    <textarea
+                                        rows={2}
+                                        placeholder="Apa yang menjadi objek kerja sama"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Ruang Lingkup</label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Batasan/lingkup kerja sama"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Aktivitas / Kegiatan</label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Daftar kegiatan yang akan dilaksanakan"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Jangka Waktu</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Contoh: 3 tahun (2026 – 2029)"
+                                        className="w-full h-11 px-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Analisis Manfaat & Biaya</label>
+                                    <textarea
+                                        rows={4}
+                                        placeholder="Manfaat yang diharapkan dan estimasi biaya"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700">Kesimpulan / Rekomendasi</label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Kesimpulan dan rekomendasi pemohon"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:outline-none placeholder:text-gray-300"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h3 className="font-bold text-[#1B4332] mb-4 flex items-center gap-2">
+                                <span className="h-1 w-6 bg-[#F39C12] rounded-full" /> Dokumen Pendukung
+                            </h3>
+                            <input
+                                ref={uploadInputRef}
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handleUploadChange}
+                                className="hidden"
+                            />
+                            <div
+                                onClick={handleOpenFileDialog}
+                                className="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-[#1B4332] transition-colors cursor-pointer"
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter' || event.key === ' ') {
+                                        event.preventDefault();
+                                        handleOpenFileDialog();
+                                    }
+                                }}
+                            >
+                                {uploadFile ? (
+                                    <div className="flex items-center justify-center gap-3">
+                                        <FileText className="h-8 w-8 text-[#1B4332]" />
+                                        <div className="text-left">
+                                            <div className="font-semibold truncate max-w-xs">{uploadFile.name}</div>
+                                            <div className="text-xs text-gray-400">{formatFileSize(uploadFile.size)} · klik untuk ganti</div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <FileUp className="h-10 w-10 text-[#1B4332] mx-auto mb-2" />
+                                        <div className="font-semibold text-gray-700">Unggah Studi Kelayakan / Proposal</div>
+                                        <div className="text-xs text-gray-400 mt-1">PDF · maks 10MB</div>
+                                    </>
+                                )}
+                            </div>
+                            {uploadError && (
+                                <p className="text-xs text-red-600 font-semibold mt-2">{uploadError}</p>
+                            )}
+                        </section>
+
+                        <button className="bg-[linear-gradient(135deg,#F39C12_0%,#D68910_100%)] text-[#1B4332] font-bold px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all w-full sm:w-auto">
                             Lanjutkan Pengajuan
                         </button>
                     </div>
+
+                    <aside className="lg:col-span-4 lg:sticky lg:top-24 self-start space-y-8">
+                        <div className="bg-[linear-gradient(135deg,#1B4332_0%,#2D6A4F_100%)] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                            <div className="absolute -top-10 -right-10 h-36 w-36 rounded-full bg-white/10 blur-3xl" />
+                            <h3 className="text-xl font-extrabold">Persyaratan</h3>
+                            <ul className="mt-5 space-y-3 text-sm">
+                                {[
+                                    'Instansi berbadan hukum / pemerintah resmi',
+                                    'Proposal kerja sama (PDF, maks 10MB)',
+                                    'Profil singkat instansi',
+                                    'Surat permohonan resmi',
+                                    'Kontak penanggung jawab aktif'
+                                ].map((text, i) => (
+                                    <li key={i} className="flex gap-3">
+                                        <CheckCircle2 className="h-5 w-5 text-[#F39C12] shrink-0" />
+                                        <span className="opacity-95">{text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+                            <h4 className="font-bold text-[#1B4332] mb-4">Butuh Bantuan?</h4>
+                            <p className="text-xs text-gray-500 mb-6 leading-relaxed">Jika Anda mengalami kendala dalam pengisian formulir, silakan hubungi tim kami.</p>
+                            <button className="w-full py-3 bg-yellow-50 text-yellow-700 font-bold text-sm rounded-xl hover:bg-yellow-100 transition-colors">
+                                Hubungi Admin
+                            </button>
+                        </div>
+                    </aside>
                 </div>
-
-                <div className="lg:col-span-4 lg:sticky lg:top-8 self-start space-y-8">
-                    <div className="bg-linear-to-br from-[#1B4332] to-[#2D6A4F] rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl"></div>
-
-                        <h3 className="text-2xl font-bold mb-8">Persyaratan</h3>
-                        <ul className="space-y-6">
-                            {[
-                                'Instansi berbadan hukum / pemerintah resmi',
-                                'Proposal kerja sama (PDF, maks 10MB)',
-                                'Profil singkat instansi',
-                                'Surat permohonan resmi',
-                                'Kontak penanggung jawab aktif'
-                            ].map((text, i) => (
-                                <li key={i} className="flex items-start gap-4">
-                                    <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center shrink-0 shadow-lg">
-                                        <Check size={14} strokeWidth={4} className="text-white" />
-                                    </div>
-                                    <span className="text-sm font-medium leading-tight opacity-90">{text}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
-                        <h4 className="font-bold text-[#1B4332] mb-4">Butuh Bantuan?</h4>
-                        <p className="text-xs text-gray-500 mb-6 leading-relaxed">Jika Anda mengalami kendala dalam pengisian formulir, silakan hubungi tim kami.</p>
-                        <button className="w-full py-3 bg-yellow-50 text-yellow-700 font-bold text-sm rounded-xl hover:bg-yellow-100 transition-colors">
-                            Hubungi Admin
-                        </button>
-                    </div>
-                </div>
-            </div>
             </div>
         </div>
     );
