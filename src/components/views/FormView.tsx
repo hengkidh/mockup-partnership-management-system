@@ -37,13 +37,13 @@ const FormView = ({
         setUploadFile(file);
     };
 
-    const handleRemoveUpload = () => {
-        setUploadFile(null);
-        setUploadError(null);
-        if (uploadInputRef.current) {
-            uploadInputRef.current.value = '';
-        }
-    };
+    // const handleRemoveUpload = () => {
+    //     setUploadFile(null);
+    //     setUploadError(null);
+    //     if (uploadInputRef.current) {
+    //         uploadInputRef.current.value = '';
+    //     }
+    // };
 
     const handleOpenFileDialog = () => {
         uploadInputRef.current?.click();
