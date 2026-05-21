@@ -22,6 +22,7 @@ import {
     PlusCircle
 } from 'lucide-react';
 import type { ViewMode } from '../../types';
+import logoUrl from '../../assets/logo.png'
 
 type SidebarProps = {
     isOpen: boolean;
@@ -65,7 +66,7 @@ const SidebarItem = ({
 const Sidebar = ({ isOpen, viewMode, onToggle }: SidebarProps) => (
     <aside className={`${isOpen ? 'w-64' : 'w-20'} bg-white border-r border-r-gray-100 transition-all duration-300 ease-in-out flex flex-col z-20 shrink-0`}>
         <div className="p-4 flex items-center gap-3 border-b h-16 bg-[#1B4332]">
-            <img src="/src/assets/logo.png" alt="Logo" className="w-8 h-8 object-contain shrink-0" />
+            <img src={logoUrl} alt="Logo" className="w-8 h-8 object-contain shrink-0" />
             {isOpen && (
                 <div className="text-white overflow-hidden whitespace-nowrap">
                     <p className="text-xs font-bold leading-tight">Badan Pemerintahan</p>
